@@ -1,0 +1,29 @@
+plot2 <- function(){
+        # Read the data from Working Directory
+        hp <- read.csv("household_power_consumption.txt",header = TRUE, sep = ";",na.strings = "?")
+
+        # Add DateTime variable combined from Date and Time
+        hp$DateTime <- strptime(paste(hp$Date,hp$Time),"%d/%m/%Y %H:%M:%S")
+
+        # SUbset data with relevant dates
+        startdate <- strptime("2007-02-01 00:00:00","%Y-%m-%d %H:%M:%S")
+        stopdate <- strptime("2007-02-02 23:59:59","%Y-%m-%d %H:%M:%S")
+        hp_rd <- hp[hp$DateTime >= startdate & hp$DateTime <= stopdate,]
+
+        #set graphic device
+        png(filename = "plot2.png",
+            width = 480, height = 480, units = "px",
+            bg = "white")
+        
+        #set Local to get timeaxis values in english
+        Sys.setlocale("LC_TIME", "English")
+        
+        #do the plot
+        plot(hp_rd$DateTime,hp_rd$Global_active_power,
+             type = "l",
+             ylab="Global Active Power (kilowatts)",
+             xlab="")
+        
+        # close the graphic device
+        dev.off()
+}
